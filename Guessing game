@@ -1,0 +1,58 @@
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.util.Random;
+
+public class GuessNumberGame extends Application {
+    private int targetNumber;
+    private int attempts;
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("Guess the Number Game");
+
+        // Generate a random number between 1 and 100
+        Random random = new Random();
+        targetNumber = random.nextInt(100) + 1;
+
+        Label label = new Label("Guess a number between 1 and 100:");
+        TextField textField = new TextField();
+        Label resultLabel = new Label();
+        Button checkButton = new Button("Check");
+
+        checkButton.setOnAction(e -> checkGuess(textField, resultLabel));
+
+        VBox layout = new VBox(10);
+        layout.getChildren().addAll(label, textField, checkButton, resultLabel);
+
+        Scene scene = new Scene(layout, 300, 200);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private void checkGuess(TextField textField, Label resultLabel) {
+        try {
+            int guess = Integer.parseInt(textField.getText());
+            attempts++;
+
+            if (guess == targetNumber) {
+                resultLabel.setText("Congratulations! You guessed it right in " + attempts + " attempts.");
+            } else if (guess < targetNumber) {
+                resultLabel.setText("Try a higher number.");
+            } else {
+                resultLabel.setText("Try a lower number.");
+            }
+        } catch (NumberFormatException e) {
+            resultLabel.setText("Please enter a valid number.");
+        }
+    }
+}
